@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="网络," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="网络拥塞 (Congestion)是由多个传输流需要共享(争用)网络内资源造成的。当资源需求超过网络容量时，就会产生问题，每条流不知道当前网络资源分配情况，每条流也不知道其它(竞争)流的存在，从而导致丢包率升高、往返时间增大、甚至网络崩溃。如何协调网络内各条流，使其可以高效利用网络资源?">
+<meta name="keywords" content="网络">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TCP拥塞控制机制详解">
+<meta property="og:url" content="http://lioncruise.github.io/2016/11/11/tcp-congestion-control/index.html">
+<meta property="og:site_name" content="lioncruise的个人主页">
+<meta property="og:description" content="网络拥塞 (Congestion)是由多个传输流需要共享(争用)网络内资源造成的。当资源需求超过网络容量时，就会产生问题，每条流不知道当前网络资源分配情况，每条流也不知道其它(竞争)流的存在，从而导致丢包率升高、往返时间增大、甚至网络崩溃。如何协调网络内各条流，使其可以高效利用网络资源?">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://lioncruise.github.io/img/864982D0-7248-45A9-AD39-F09134C8B0E8.png">
+<meta property="og:image" content="http://lioncruise.github.io/img/FB75DA4B-9242-42DB-89DC-8224691E6452.png">
+<meta property="og:image" content="http://lioncruise.github.io/img/4B972BAC-95D1-44FC-B15A-F2C6B3D85826.png">
+<meta property="og:updated_time" content="2017-12-30T09:34:54.469Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TCP拥塞控制机制详解">
+<meta name="twitter:description" content="网络拥塞 (Congestion)是由多个传输流需要共享(争用)网络内资源造成的。当资源需求超过网络容量时，就会产生问题，每条流不知道当前网络资源分配情况，每条流也不知道其它(竞争)流的存在，从而导致丢包率升高、往返时间增大、甚至网络崩溃。如何协调网络内各条流，使其可以高效利用网络资源?">
+<meta name="twitter:image" content="http://lioncruise.github.io/img/864982D0-7248-45A9-AD39-F09134C8B0E8.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://lioncruise.github.io/2016/11/11/tcp-congestion-control/"/>
+
+
+
+
+
+  <title>TCP拥塞控制机制详解 | lioncruise的个人主页</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">lioncruise的个人主页</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            站点地图
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://lioncruise.github.io/2016/11/11/tcp-congestion-control/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="lioncruise(覃世军)">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lioncruise的个人主页">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">TCP拥塞控制机制详解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-11-11T14:31:23+08:00">
+                2016-11-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>网络拥塞 (Congestion)是由多个传输流需要共享(争用)网络内资源造成的。当资源需求超过网络容量时，就会产生问题，每条流不知道当前网络资源分配情况，每条流也不知道其它(竞争)流的存在，从而导致丢包率升高、往返时间增大、甚至网络崩溃。如何协调网络内各条流，使其可以高效利用网络资源?</p>
+<p><img src="/img/864982D0-7248-45A9-AD39-F09134C8B0E8.png" alt=""></p>
+<a id="more"></a>
+<p>拥塞控制（congestion control)是TCP协议的一项重要功能，TCP的拥塞控制机制是从端到端的角度，推测网络是否发生拥塞，如果推断网络发生拥塞，则立即将数据发送速率降下来，以便缓解网络拥塞。</p>
+<p>TCP的拥塞控制采用的是窗口机制，通过调节窗口的大小实现对数据发送速率的调整。TCP的发送端维持一个称为拥塞窗口cwnd的变量，单位为字节，用于表示在未收到接收端确认的情况下，可以连续发送的数据字节数。cwnd的大小取决于网络的拥塞程度，并且动态地发生变化。拥塞窗口调整的原则是：只要网络没有出现拥塞，就可以增大拥塞窗口，以便将更多的数据发送出去，相当于提高发送速率；一旦网络出现拥塞，拥塞窗口就减小一些，减少注入网络的数据量，从而缓解网络的拥塞。</p>
+<p>发送端判断网络发生拥塞的依据是：发送端设置一个重传计时器RTO，对于某个已发出的数据报文段，如果在RTO计时到期后，还没有收到来自接收端的确认，则认为此时网络发生了拥塞。</p>
+<p>TCP的拥塞控制算法包括了慢启动（slow start）、拥塞避免（congestion avoidance）、快速重传（fast retransmit）和快速恢复（fast recovery）四部分。</p>
+<p><img src="/img/FB75DA4B-9242-42DB-89DC-8224691E6452.png" alt=""></p>
+<h2 id="慢启动"><a href="#慢启动" class="headerlink" title="慢启动"></a>慢启动</h2><p>慢启动算法作用在TCP数据传输的开始阶段，当主机开始发送数据时，因为不知道网络中的负荷情况，如果立即发送大量的数据，有可能会引起网络的拥塞。因此，TCP采用试探的方法，逐渐增大拥塞窗口。通常在刚开始发送数据报文段时，先将拥塞窗口cwnd设置为一个TCP最大段长度MSS的值。而在每收到一个数据报文段的确认后，cwnd就增加一个MSS的数值。这样就可以逐渐增大发送端的拥塞窗口，使数据注入网络的速率比较合理。如果定义从发送端发出一个数据报文段到收到这个数据报文段的确认的时间间隔为往返时间RTT，则在慢启动阶段，每经过一个RTT，cwnd的值就加倍。值得注意的是，慢启动并不是说启动过程增长慢，而是说初始的发送窗口小。</p>
+<h2 id="拥塞避免"><a href="#拥塞避免" class="headerlink" title="拥塞避免"></a>拥塞避免</h2><p>为了防止拥塞窗口增长过快而引起网络拥塞，TCP还需要设置一个慢启动阈值ssthresh，当拥塞窗口的值增加到ssthresh时，就要减缓拥塞窗口的增长速度，具体的做法是每经过一个RTT，拥塞窗口cwnd的值加1（单位为MSS），这样就可以使cwnd按线性规律缓慢增长，这个过程称之为“加性增加”（Additive Increase）算法。通常情况下，拥塞窗口cwnd的初值被设置为1，慢启动阈值ssthresh的初值被设置为16。当拥塞避免算法执行到某个时刻，发送端在规定时间内没有收到接收端的确认，即发生了网络超时，则意味着网络发生了拥塞。此时，发送端首先将ssthresh的值变为发生超时时cwnd值的一半，同时将cwnd的值置为1，重新执行慢启动算法。这样做的好处是，当网络频繁出现拥塞时，ssthresh下降得很快，可以大大减少注入网络中的数据报文段。通常称这个过程为“乘性减小”（MultiplicativeDecrease）算法。TCP中的“加性增加”和“乘性减小”算法合起来称为AIMD算法。</p>
+<p>慢启动和拥塞避免是 1988 年提出的拥塞控制算法， 1990 年在此基础上又增加了快速重传和快速恢复两个算法。</p>
+<h2 id="快速重传"><a href="#快速重传" class="headerlink" title="快速重传"></a>快速重传</h2><p>快速重传算法的基本思想是：接收端每收到一个失序的数据报文段后就立即发出重复确认，以便更早地通知发送端有丢包的情况发生。假设在某个TCP数据传输过程中，接收端依次收到发送端发出的1号和2号数据报文段，并对这两个数据报文段发送确认后，没有按次序收到3号数据报文段，而是收到了4号，这时就需要立即向发送端发送一个2号数据报文段的确认，称为重复确认。同理，如果继续收到5号、6号数据报文段，接收端仍然要向发送端发出2号数据报文段的重复确认。此时，发送端会收到多个2号数据报文段的重复确认，则认为3号数据报文段发生了丢包，需要立即向接收端重传3号数据报文段，而不需要等待重传计时器到期再重传。快速重传算法中规定如果收到某数据报文段的三个重复确认，则立即重传下一个数据报文段。使用快速重传比用超时重传快很多，超时重传中间只能等待不能做任何事，而且又要重新慢启动，因此要尽量用快速重传。要知道，ACK指的是下一个期望的数据包，如果发送方一直收到ACK，说明接收方没有收到那个包，因此要快速重传。</p>
+<p><img src="/img/4B972BAC-95D1-44FC-B15A-F2C6B3D85826.png" alt=""></p>
+<h2 id="快速恢复"><a href="#快速恢复" class="headerlink" title="快速恢复"></a>快速恢复</h2><p>快速恢复是配合快速重传使用的算法，其基本思想是：当发送端连续收到三个重复确认时，就将慢启动阈值ssthresh减半，以预防网络拥塞的发生，并且将拥塞窗口cwnd的值置为减半后的ssthresh，然后开始执行拥塞避免算法，使得cwnd缓慢地加性增大。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/网络/" rel="tag"># 网络</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/10/30/heap-sort/" rel="next" title="常见排序算法-堆排序">
+                <i class="fa fa-chevron-left"></i> 常见排序算法-堆排序
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/01/10/virtualenv/" rel="prev" title="Python的virtualenv">
+                Python的virtualenv <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">lioncruise(覃世军)</p>
+              <p class="site-description motion-element" itemprop="description">克己，慎独</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/lioncruise" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="272700767@qq.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#慢启动"><span class="nav-number">1.</span> <span class="nav-text">慢启动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拥塞避免"><span class="nav-number">2.</span> <span class="nav-text">拥塞避免</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#快速重传"><span class="nav-number">3.</span> <span class="nav-text">快速重传</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#快速恢复"><span class="nav-number">4.</span> <span class="nav-text">快速恢复</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lioncruise(覃世军)</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

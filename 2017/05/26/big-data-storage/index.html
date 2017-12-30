@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="分布式系统分布式系统由网络将不同的机器连接起来。 类型：  C/S P2P（没有中心节点，整个系统功能完全是分布式完成的）  CAP理论：  多份数据的 一致性 系统的 可用性 容忍网络断开  CAP三者不可兼得。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《大数据系统与数据分析》之存储">
+<meta property="og:url" content="http://lioncruise.github.io/2017/05/26/big-data-storage/index.html">
+<meta property="og:site_name" content="lioncruise的个人主页">
+<meta property="og:description" content="分布式系统分布式系统由网络将不同的机器连接起来。 类型：  C/S P2P（没有中心节点，整个系统功能完全是分布式完成的）  CAP理论：  多份数据的 一致性 系统的 可用性 容忍网络断开  CAP三者不可兼得。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://lioncruise.github.io/img/NameNode-DataNode.png">
+<meta property="og:image" content="http://lioncruise.github.io/img/Dynamo.png">
+<meta property="og:image" content="http://lioncruise.github.io/img/Dynamo写.png">
+<meta property="og:image" content="http://lioncruise.github.io/img/Dynamo读.png">
+<meta property="og:image" content="http://lioncruise.github.io/img/BigTable结构.png">
+<meta property="og:image" content="http://lioncruise.github.io/img/BigTable的存储结构.png">
+<meta property="og:updated_time" content="2017-12-30T09:30:08.684Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="《大数据系统与数据分析》之存储">
+<meta name="twitter:description" content="分布式系统分布式系统由网络将不同的机器连接起来。 类型：  C/S P2P（没有中心节点，整个系统功能完全是分布式完成的）  CAP理论：  多份数据的 一致性 系统的 可用性 容忍网络断开  CAP三者不可兼得。">
+<meta name="twitter:image" content="http://lioncruise.github.io/img/NameNode-DataNode.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://lioncruise.github.io/2017/05/26/big-data-storage/"/>
+
+
+
+
+
+  <title>《大数据系统与数据分析》之存储 | lioncruise的个人主页</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">lioncruise的个人主页</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            站点地图
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://lioncruise.github.io/2017/05/26/big-data-storage/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="lioncruise(覃世军)">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lioncruise的个人主页">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">《大数据系统与数据分析》之存储</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-26T16:02:20+08:00">
+                2017-05-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="分布式系统"><a href="#分布式系统" class="headerlink" title="分布式系统"></a>分布式系统</h2><p>分布式系统由网络将不同的机器连接起来。</p>
+<p>类型：</p>
+<ul>
+<li>C/S</li>
+<li>P2P（没有中心节点，整个系统功能完全是分布式完成的）</li>
+</ul>
+<p>CAP理论：</p>
+<ul>
+<li>多份数据的 一致性</li>
+<li>系统的 可用性</li>
+<li>容忍网络断开</li>
+</ul>
+<p>CAP三者不可兼得。</p>
+<a id="more"></a>
+<h2 id="分布式文件系统"><a href="#分布式文件系统" class="headerlink" title="分布式文件系统"></a>分布式文件系统</h2><p>GFS</p>
+<ul>
+<li>C/C++实现</li>
+<li>Google MapReduce的基础</li>
+</ul>
+<p>HDFS</p>
+<ul>
+<li>GFS的开源实现</li>
+<li>基于Java</li>
+<li>应用层的文件系统（下面说明应用层文件系统和普通文件系统的不同）</li>
+</ul>
+<p>普通文件系统，比如POSIX文件系统，本来就是OS内核的一部分，其对外提供系统调用。</p>
+<p>而HDFS，要对其上内容进行操作，必须连接HDFS client，HDFS client完全是一个用户程序，其底层调用了普通文件系统提供的系统调用。</p>
+<p>GFS的设计目标：</p>
+<ul>
+<li>大块数据的顺序读</li>
+<li>并行追加（append）</li>
+<li>不支持修改（overwrite）操作，因此 一致性 的实现可以大大简化</li>
+</ul>
+<p>GFS/HDFS系统架构</p>
+<p><img src="/img/NameNode-DataNode.png" alt="GFS/HDFS系统架构"></p>
+<ul>
+<li>大文件切分成定长的数据块（默认64MB大小的数据块）</li>
+<li>每个数据块独立地分布存储在DataNode上</li>
+<li>默认每个数据块存储3份，在3个不同的DataNode上（提高可用性）</li>
+<li>很好的顺序读性能</li>
+</ul>
+<h2 id="分布式存储（KV型）"><a href="#分布式存储（KV型）" class="headerlink" title="分布式存储（KV型）"></a>分布式存储（KV型）</h2><p>NoSQL大部分是又互联网公司研发的，目标是支持本公司的某类重要的应用。关系型数据库不能满足特定的需求。</p>
+<p>NoSQL往往是针对目标应用开发，简化了许多关系型数据库的功能，提高了系统性能、伸缩性等。不支持（完全的）SQL，不支持（完全的）ACID。</p>
+<p>KV 型存储</p>
+<p>KV 数据库通常是PUT和GET这两个操作。著名的KV型NoSQL有以下几个：</p>
+<p>Amazon Dynamo</p>
+<p>支持Amazon电商平台上运行的大量服务。比如，best sellers lists、购物车、session 管理等。</p>
+<p><img src="/img/Dynamo.png" alt="Dynamo系统结构"></p>
+<p>关键技术：一致性Hash算法。</p>
+<p>备份：数据存储3份。</p>
+<p>节点负载的问题：用 虚拟节点 解决。</p>
+<p>Quorum机制（Quorum:翻译为法定人数）：如果有N个副本，要求写的时候保证至少写了W个副本，要 求读的时候至少从R个副本读了数据，满足R+W&gt;N，那么一定读到了最新的数据。R比较小，那么读的效率就越高；W比较小，那么写的效率就越高。</p>
+<p><img src="/img/Dynamo写.png" alt="Dynamo PUT操作"></p>
+<p><img src="/img/Dynamo读.png" alt="Dynamo GET操作"></p>
+<p>Quorum机制是一种 弱一致性 的解决方案。Put操作并没有等待所有N个节点全部写完成，可以提高写效率，增加系统性能。系统总会 <strong>最终</strong> 保证每个KV的N个副本都写成功，最终一致，但是不保证短时间内达到一致，最终可能需要很长的时间才能达到一致。</p>
+<p>互联网应用，因为关系到用户体验，很多时候要更加注重 可用性（Availability）。</p>
+<p>Google Bigtable/Apache HBase</p>
+<p><img src="/img/BigTable结构.png" alt="BigTable结构"></p>
+<ul>
+<li>Key = row key + column family + column key</li>
+<li>所有row key是按顺序存储的</li>
+<li>其中column又有column family前缀。Column family是需要事先声明的，种类有限(例如~10或~100)，而column key可以有很多。</li>
+<li>具体存储时，每个column family将分开存储（类似于列式数据库，见下图）</li>
+</ul>
+<p><img src="/img/BigTable的存储结构.png" alt="BigTable的存储结构"></p>
+<p>上图中的 contents 和 anchor 是 column family，cnnsi.com和my.look.ca是anchor这个column family下的column key。上图省略了timestamp。</p>
+<p>BigTable/HBase 是基于 分布式文件系统 GFS/HDFS 的，分布式文件系统自动给其上NoSQL备份了3份副本。</p>
+<p>Bigtable / Hbase 操作：</p>
+<ul>
+<li>Get：给定row key, column family, column key，读取value</li>
+<li>Put：给定row key, column family, column key，创建或更新value</li>
+<li>Scan：给定一个范围，读取这个范围内所有row key的value（Row key是排序存储的）</li>
+<li>Delete：删除一个指定的value</li>
+</ul>
+<p>HBase的实时性还可以，Hive的实时性非常差。</p>
+<p>HBase最常见的应用场景就是采集网页数据的存储。由于是KV结构，后来扩展到存 日志 也可以。</p>
+<p>HBase还是算作是OLTP的NoSQL。</p>
+<p>日志（Log）的作用：排错、Crash recovery。</p>
+<p>分布式协同：ZooKeeper</p>
+<h2 id="文档存储系统"><a href="#文档存储系统" class="headerlink" title="文档存储系统"></a>文档存储系统</h2><p>JSON：一种轻量级的数据交换存储格式。</p>
+<p>Google Protocol Buffers：Google退出的一种轻便高效的结构化数据存储传输格式。</p>
+<p>JSON vs. XML：XML没有JSON轻量级，标签很重</p>
+<p>Apache Thrift：实现多语言的相互RPC调用</p>
+<p>mongoDB：</p>
+<ul>
+<li>JSON是基本数据类型，存储为BSON二进制表示</li>
+<li>名词<ul>
+<li>Database ~ 关系型中的数据库概念</li>
+<li>Collection ~ 关系型中的table概念</li>
+<li>Document ~ 关系型中的记录概念</li>
+</ul>
+</li>
+<li>一个database包含多个collections， 每个collection包含多个documents。每个document的大小小于16MB</li>
+</ul>
+<p>mongoDB 也支持简单的类似SQL的CRUD、聚合等操作，但是不支持join这种操作。</p>
+<p>mongoDB集群</p>
+<ul>
+<li>数据分片成多个shard</li>
+<li>每个shard有多个副本</li>
+</ul>
+<h2 id="图存储系统"><a href="#图存储系统" class="headerlink" title="图存储系统"></a>图存储系统</h2><p>社交网络、地铁地图等的存储。</p>
+<p>图数据存储系统</p>
+<ul>
+<li>存储图的顶点和边</li>
+<li>提供顶点和边的查询</li>
+</ul>
+<p>Neo4j</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/15/big-data-relational-database/" rel="next" title="《大数据系统与数据分析》之关系型数据库">
+                <i class="fa fa-chevron-left"></i> 《大数据系统与数据分析》之关系型数据库
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/05/concurrent-transaction/" rel="prev" title="浅谈并发事务">
+                浅谈并发事务 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">lioncruise(覃世军)</p>
+              <p class="site-description motion-element" itemprop="description">克己，慎独</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/lioncruise" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="272700767@qq.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#分布式系统"><span class="nav-number">1.</span> <span class="nav-text">分布式系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分布式文件系统"><span class="nav-number">2.</span> <span class="nav-text">分布式文件系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分布式存储（KV型）"><span class="nav-number">3.</span> <span class="nav-text">分布式存储（KV型）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文档存储系统"><span class="nav-number">4.</span> <span class="nav-text">文档存储系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#图存储系统"><span class="nav-number">5.</span> <span class="nav-text">图存储系统</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lioncruise(覃世军)</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
