@@ -7,6 +7,14 @@
     </url>
 
     <url>
+        <loc>http://lioncruise.github.io/2017/10/05/kubeadm-install-ha-k8s/</loc>
+        <lastmod>2018-01-14T14:14:31.331Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
         <loc>http://lioncruise.github.io/2017/05/20/concurrent-transaction/</loc>
         <lastmod>2018-01-14T12:57:44.835Z</lastmod>
         <changefreq>weekly</changefreq>
