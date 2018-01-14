@@ -251,6 +251,16 @@
         </li>
       
         
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-archives">
           <a href="/archives/" rel="section">
             
@@ -351,7 +361,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://lioncruise.github.io/2016/04/23/classloader/">
+    <link itemprop="mainEntityOfPage" href="http://lioncruise.github.io/2015/11/29/java-reflection/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="lioncruise(覃世军)">
@@ -370,7 +380,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2016/04/23/classloader/" itemprop="url">类加载器与双亲委派模型</a></h1>
+                <a class="post-title-link" href="/2015/11/29/java-reflection/" itemprop="url">对Java反射机制的一点见解</a></h1>
         
 
         <div class="post-meta">
@@ -382,8 +392,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-04-23T08:31:26+08:00">
-                2016-04-23
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-11-29T21:32:15+08:00">
+                2015-11-29
               </time>
             
 
@@ -392,6 +402,28 @@
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -421,11 +453,10 @@
 
       
         
-          <p><strong>虚拟机规范把类加载阶段中的“通过一个类的全限定名（包名加类名）来获取描述此类的二进制字节流”这个动作放到JVM外部实现</strong>，以便让应用程序自己决定如何去获取所需要的类。实现这个动作的代码模块成为“<strong>类加载器</strong>”。</p>
-<p>类加载器可以说是Java语言的一项创新，也是Java语言流行的重要原因之一，其最初是为了满足Java Applet的需求开发出来的。虽然Applet现在基本已经死了，但是类加载器却在层次划分、OSGi、热部署、代码加密等领域大放光彩，成为Java技术体系中的一块重要基石。</p>
+          <p>首先，从动态语言讲起。像Python、Ruby这种语言，只要修改了代码，修改的效果立即生效，因为这种语言是无需编译，直接执行代码的，我们称这类语言是“动态语言”。而C++、Java这种，在运行之前需要先编译，如果中途修改了代码不重新编译去执行的话就没有变化。但是，Java有一个非常突出的动态相关机制，即反射：我们可以于运行时（区别于编译时）加载、探知、使用编译期间完全未知的classes。换句话说，Java程序可以加载一个运行时才得知名称的class（在这之前修改这个类即时不编译都有效），获悉其完整构造（但不包括methods定义），并生成其对象实体、或对其fields设值、或唤起其methods。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/04/23/classloader/#more" rel="contents">
+            <a class="btn" href="/2015/11/29/java-reflection/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -524,13 +555,22 @@
             
 
             
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
 
             
               
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">17</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -584,7 +624,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -607,7 +647,7 @@
 
   
     <span class="site-uv">
-      本站访客数
+      总访客数
       <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
       人次
     </span>
@@ -615,7 +655,7 @@
 
   
     <span class="site-pv">
-      本站总访问量
+      总访问量
       <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
       次
     </span>
@@ -774,6 +814,21 @@
   
 
   
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
 
   
 

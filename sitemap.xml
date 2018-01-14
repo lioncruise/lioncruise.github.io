@@ -3,7 +3,7 @@
 
     <sitemap>
         <loc>http://lioncruise.github.io/post-sitemap.xml</loc>
-        <lastmod>2017-12-30T09:35:30.941Z</lastmod>
+        <lastmod>2018-01-14T12:57:44.835Z</lastmod>
     </sitemap>
 
     <sitemap>
@@ -12,8 +12,13 @@
     </sitemap>
 
     <sitemap>
+        <loc>http://lioncruise.github.io/category-sitemap.xml</loc>
+        <lastmod>2018-01-14T12:49:34.222Z</lastmod>
+    </sitemap>
+
+    <sitemap>
         <loc>http://lioncruise.github.io/tag-sitemap.xml</loc>
-        <lastmod>2017-12-30T09:29:26.478Z</lastmod>
+        <lastmod>2018-01-14T12:43:36.374Z</lastmod>
     </sitemap>
 
 </sitemapindex>
