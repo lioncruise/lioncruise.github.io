@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://lioncruise.github.io/"/>
-  <updated>2018-01-14T14:16:53.587Z</updated>
+  <updated>2018-01-20T15:25:35.612Z</updated>
   <id>http://lioncruise.github.io/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>一种Kubernetes开发环境搭建思想</title>
+    <link href="http://lioncruise.github.io/2018/01/15/develop-k8s-guide/"/>
+    <id>http://lioncruise.github.io/2018/01/15/develop-k8s-guide/</id>
+    <published>2018-01-15T15:22:11.000Z</published>
+    <updated>2018-01-20T15:25:35.612Z</updated>
+    
+    <content type="html"><![CDATA[<p>本文会介绍一种开发Kubernetes的思路。在Windows上使用GoLand IDE查看Kubernetes项目源码，在Linux上编译项目。在Linux上安装FTP服务来同步Windows和Linux之间的代码。</p><h2 id="在Linux上搭建FTP服务器并尝试编译K8S"><a href="#在Linux上搭建FTP服务器并尝试编译K8S" class="headerlink" title="在Linux上搭建FTP服务器并尝试编译K8S"></a>在Linux上搭建FTP服务器并尝试编译K8S</h2><p>安装FTP服务器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y vsftpd</span><br></pre></td></tr></table></figure></p><p>修改 <code>/etc/vsftpd/</code> 下的 <code>ftpusers</code>、<code>user_list</code>文件，注释掉root用户，使root用户能够登录FTP服务器。ftp的配置文件主要有三个，位于 <code>/etc/vsftpd/</code> 目录下，分别是：<code>ftpusers</code>（该文件用来指定那些用户不能访问ftp服务器）、<code>user_list</code>（该文件用来指示的默认账户在默认情况下也不能访问ftp）、<code>vsftpd.conf</code>（vsftpd的主配置文件）。</p><p>启动FTP服务器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl start vsftpd</span><br><span class="line">systemctl enable vsftpd</span><br></pre></td></tr></table></figure></p><p>创建一个如下的目录结构</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">- /</span><br><span class="line">  - repos</span><br><span class="line">    - kubernetes</span><br><span class="line">      - bin</span><br><span class="line">      - pkg</span><br><span class="line">      - src</span><br><span class="line">        - k8s.io</span><br></pre></td></tr></table></figure><p>设置 <code>/repos/kubernetes</code> 为GOPATH，在 <code>~/.zshrc</code> 中添加一行</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export GOPATH=/repos/kubernetes</span><br></pre></td></tr></table></figure><p>然后<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">go get -d k8s.io/kubernetes</span><br><span class="line">cd $GOPATH/src/k8s.io/kubernetes</span><br><span class="line">$ make</span><br></pre></td></tr></table></figure></p><p>如果make未出现错误则表示成功。make需要安装gcc编译器。</p><h2 id="在Windows上安装IDE以及代码"><a href="#在Windows上安装IDE以及代码" class="headerlink" title="在Windows上安装IDE以及代码"></a>在Windows上安装IDE以及代码</h2><p>GoLand下载地址：<a href="https://www.jetbrains.com/go/download/" target="_blank" rel="noopener">https://www.jetbrains.com/go/download/</a></p><p>License server地址：<a href="http://idea.youbbs.org（2018.1.15更新GoLand可用）" target="_blank" rel="noopener">http://idea.youbbs.org（2018.1.15更新GoLand可用）</a></p><p>创建一个如下的目录结构</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">- $HOME</span><br><span class="line">  - repos</span><br><span class="line">    - kubernetes</span><br><span class="line">      - bin</span><br><span class="line">      - pkg</span><br><span class="line">      - src</span><br><span class="line">        - k8s.io</span><br></pre></td></tr></table></figure><p>然后<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd $HOME/repos/kubernetes/src/k8s.io</span><br><span class="line">git clone https://github.com/kubernetes/kubernetes.git</span><br></pre></td></tr></table></figure></p><p>然后在项目目录下使用 <code>go get</code> 命令，会从互联网上解析下载项目依赖的包。使你看代码的时候不会出现标识符找不到红色的情况，更加方便你看代码。</p><p>然后用GoLand打开<code>$HOME/repos/kubernetes</code>这个项目。使用JetBrains IDE的好处有很多，比如可视化地查看代码结构，全文检索代码、各种工具的GUI化、集成化等。但是IDE是安装在Windows上的，但是Kubernetes的代码只能在Linux上编译。</p><h2 id="在GoLand上使用插件访问FTP服务实现文件同步"><a href="#在GoLand上使用插件访问FTP服务实现文件同步" class="headerlink" title="在GoLand上使用插件访问FTP服务实现文件同步"></a>在GoLand上使用插件访问FTP服务实现文件同步</h2><p>需要在Setting=&gt;Plugins中安装 Remote Hosts Access 这个插件。重启IDE之后，在Setting中搜索Deployment，新增一项，主要需要配置两个tab。</p><p>Connection</p><p><img src="/img/20180120230249.png" alt="Connection"></p><p>Mappings</p><p><img src="/img/20180120230317.png" alt="Mappings"></p><p>这里要注意一点如果你用的是匿名用户，默认是没有所有目录访问权限的。这里使用的root用户，具有所有目录文件的访问权限。</p><p>配置好之后，可以在菜单栏=&gt;Tools=&gt;Deployment=&gt;Browse Remote Host查看刚刚添加的远程主机中的目录（能看到的范围根据你设置的根目录而定）。</p><p>因为Kubernetes项目非常大，不建议使用全量的upload功能，这样会扫描全部文件并且传输全部内容。我们可以在Windows上修改了一个文件之后，在Project视图中点击Upload to dev然后就可以同步到远程主机。然后可以在远程Linux主机中使用make编译Kubernetes项目。</p><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>这样开发基本上解决了又能在Windows上用IDE高效开发代码，又解决了Kubernetes项目编译的问题。但还是有很多不足：</p><ol><li>使用git pull同步代码，需要在两台机器上都操作一遍</li></ol>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;本文会介绍一种开发Kubernetes的思路。在Windows上使用GoLand IDE查看Kubernetes项目源码，在Linux上编译项目。在Linux上安装FTP服务来同步Windows和Linux之间的代码。&lt;/p&gt;
+&lt;h2 id=&quot;在Linux上搭建FTP服务器
+      
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>基于kubeadm部署高可用Kubernetes集群</title>
