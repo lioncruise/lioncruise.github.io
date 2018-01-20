@@ -7,16 +7,16 @@
     </url>
 
     <url>
-        <loc>http://lioncruise.github.io/2018/01/15/develop-k8s-guide/</loc>
-        <lastmod>2018-01-20T15:50:10.252Z</lastmod>
+        <loc>http://lioncruise.github.io/2017/10/05/kubeadm-install-ha-k8s/</loc>
+        <lastmod>2018-01-20T15:51:23.222Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
     </url>
 
     <url>
-        <loc>http://lioncruise.github.io/2017/10/05/kubeadm-install-ha-k8s/</loc>
-        <lastmod>2018-01-14T14:16:53.587Z</lastmod>
+        <loc>http://lioncruise.github.io/2018/01/15/develop-k8s-guide/</loc>
+        <lastmod>2018-01-20T15:50:10.252Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
