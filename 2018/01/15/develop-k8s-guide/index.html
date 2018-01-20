@@ -119,19 +119,19 @@
 
 
 
-<meta name="description" content="本文会介绍一种开发Kubernetes的思路。在Windows上使用GoLand IDE查看Kubernetes项目源码，在Linux上编译项目。在Linux上安装FTP服务来同步Windows和Linux之间的代码。 在Linux上搭建FTP服务器并尝试编译K8S安装FTP服务器1yum install -y vsftpd 修改 /etc/vsftpd/ 下的 ftpusers、user_lis">
+<meta name="description" content="本文会介绍一种开发Kubernetes的思路。在Windows上使用GoLand IDE查看Kubernetes项目源码，在Linux上编译项目。在Linux上安装FTP服务来同步Windows和Linux之间的代码。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="一种Kubernetes开发环境搭建思想">
 <meta property="og:url" content="http://lioncruise.github.io/2018/01/15/develop-k8s-guide/index.html">
 <meta property="og:site_name" content="Cassini">
-<meta property="og:description" content="本文会介绍一种开发Kubernetes的思路。在Windows上使用GoLand IDE查看Kubernetes项目源码，在Linux上编译项目。在Linux上安装FTP服务来同步Windows和Linux之间的代码。 在Linux上搭建FTP服务器并尝试编译K8S安装FTP服务器1yum install -y vsftpd 修改 /etc/vsftpd/ 下的 ftpusers、user_lis">
+<meta property="og:description" content="本文会介绍一种开发Kubernetes的思路。在Windows上使用GoLand IDE查看Kubernetes项目源码，在Linux上编译项目。在Linux上安装FTP服务来同步Windows和Linux之间的代码。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://lioncruise.github.io/img/20180120230249.png">
 <meta property="og:image" content="http://lioncruise.github.io/img/20180120230317.png">
-<meta property="og:updated_time" content="2018-01-20T15:25:35.612Z">
+<meta property="og:updated_time" content="2018-01-20T15:26:51.988Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="一种Kubernetes开发环境搭建思想">
-<meta name="twitter:description" content="本文会介绍一种开发Kubernetes的思路。在Windows上使用GoLand IDE查看Kubernetes项目源码，在Linux上编译项目。在Linux上安装FTP服务来同步Windows和Linux之间的代码。 在Linux上搭建FTP服务器并尝试编译K8S安装FTP服务器1yum install -y vsftpd 修改 /etc/vsftpd/ 下的 ftpusers、user_lis">
+<meta name="twitter:description" content="本文会介绍一种开发Kubernetes的思路。在Windows上使用GoLand IDE查看Kubernetes项目源码，在Linux上编译项目。在Linux上安装FTP服务来同步Windows和Linux之间的代码。">
 <meta name="twitter:image" content="http://lioncruise.github.io/img/20180120230249.png">
 
 
@@ -437,6 +437,7 @@
 
       
         <p>本文会介绍一种开发Kubernetes的思路。在Windows上使用GoLand IDE查看Kubernetes项目源码，在Linux上编译项目。在Linux上安装FTP服务来同步Windows和Linux之间的代码。</p>
+<a id="more"></a>
 <h2 id="在Linux上搭建FTP服务器并尝试编译K8S"><a href="#在Linux上搭建FTP服务器并尝试编译K8S" class="headerlink" title="在Linux上搭建FTP服务器并尝试编译K8S"></a>在Linux上搭建FTP服务器并尝试编译K8S</h2><p>安装FTP服务器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y vsftpd</span><br></pre></td></tr></table></figure></p>
 <p>修改 <code>/etc/vsftpd/</code> 下的 <code>ftpusers</code>、<code>user_list</code>文件，注释掉root用户，使root用户能够登录FTP服务器。ftp的配置文件主要有三个，位于 <code>/etc/vsftpd/</code> 目录下，分别是：<code>ftpusers</code>（该文件用来指定那些用户不能访问ftp服务器）、<code>user_list</code>（该文件用来指示的默认账户在默认情况下也不能访问ftp）、<code>vsftpd.conf</code>（vsftpd的主配置文件）。</p>
 <p>启动FTP服务器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl start vsftpd</span><br><span class="line">systemctl enable vsftpd</span><br></pre></td></tr></table></figure></p>
