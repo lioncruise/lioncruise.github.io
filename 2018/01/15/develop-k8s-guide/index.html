@@ -129,7 +129,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://lioncruise.github.io/img/20180120230249.png">
 <meta property="og:image" content="http://lioncruise.github.io/img/20180120230317.png">
-<meta property="og:updated_time" content="2018-01-29T13:53:20.262Z">
+<meta property="og:updated_time" content="2018-01-29T14:38:55.804Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="一种Kubernetes开发环境搭建的思路">
 <meta name="twitter:description" content="本文会介绍一种开发Kubernetes的思路。在Windows上使用GoLand IDE查看Kubernetes项目源码，在Linux上编译项目。在Linux上安装FTP服务来同步Windows和Linux之间的代码。">
@@ -477,7 +477,7 @@
 <p>然后<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd $HOME/repos/kubernetes/src/k8s.io</span><br><span class="line">git clone https://github.com/kubernetes/kubernetes.git</span><br></pre></td></tr></table></figure></p>
 <p><del>然后在项目目录下使用 <code>go get</code> 命令，会从互联网上解析下载项目依赖的包。使你看代码的时候不会出现标识符找不到变成红色的情况，更加方便你看代码。</del> Go 1.5之后使用了vendor这种包管理机制，无须使用go get。</p>
 <p>然后用GoLand打开<code>$HOME/repos/kubernetes</code>这个项目。使用JetBrains IDE的好处有很多，比如可视化地查看代码结构，全文检索代码、各种工具的GUI化、集成化等。但是IDE是安装在Windows上的，但是Kubernetes的代码只能在Linux上编译。</p>
-<h2 id="在GoLand上使用插件访问FTP服务实现文件同步"><a href="#在GoLand上使用插件访问FTP服务实现文件同步" class="headerlink" title="在GoLand上使用插件访问FTP服务实现文件同步"></a>在GoLand上使用插件访问FTP服务实现文件同步</h2><p>需要在Setting=&gt;Plugins中安装 Remote Hosts Access 这个插件。重启IDE之后，在Setting中搜索Deployment，新增一项，主要需要配置两个tab。</p>
+<h2 id="在GoLand上使用插件访问FTP服务实现文件同步"><a href="#在GoLand上使用插件访问FTP服务实现文件同步" class="headerlink" title="在GoLand上使用插件访问FTP服务实现文件同步"></a>在GoLand上使用插件访问FTP服务实现文件同步</h2><p>需要在Setting=&gt;Plugins中安装 Remote Hosts Access 这个插件。重启IDE之后，在Setting中搜索Deployment，新增一项，主要需要配置两个tab。<red>下面图一中有一种错误：Root path的路径必须和Windows上项目的根路径保持一致，下图中的Root path应该改为：<code>/repos/kubernetes</code>。</red></p>
 <p>Connection</p>
 <p><img src="/img/20180120230249.png" alt="Connection"></p>
 <p>Mappings</p>
@@ -548,8 +548,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/10/05/kubeadm-install-ha-k8s/" rel="next" title="基于kubeadm部署高可用Kubernetes集群">
-                <i class="fa fa-chevron-left"></i> 基于kubeadm部署高可用Kubernetes集群
+              <a href="/2017/11/20/devops/" rel="next" title="云计算时代的软件开发模式-DevOps">
+                <i class="fa fa-chevron-left"></i> 云计算时代的软件开发模式-DevOps
               </a>
             
           </div>
@@ -675,7 +675,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">19</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

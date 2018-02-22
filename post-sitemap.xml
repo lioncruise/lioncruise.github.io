@@ -7,8 +7,24 @@
     </url>
 
     <url>
+        <loc>http://lioncruise.github.io/2017/11/20/devops/</loc>
+        <lastmod>2018-02-22T14:18:46.975Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://lioncruise.github.io/2017/05/20/concurrent-transaction/</loc>
+        <lastmod>2018-02-22T09:16:55.793Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
         <loc>http://lioncruise.github.io/2018/01/15/develop-k8s-guide/</loc>
-        <lastmod>2018-01-29T13:53:20.262Z</lastmod>
+        <lastmod>2018-01-29T14:38:55.804Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
@@ -17,14 +33,6 @@
     <url>
         <loc>http://lioncruise.github.io/2017/10/05/kubeadm-install-ha-k8s/</loc>
         <lastmod>2018-01-20T15:51:23.222Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>http://lioncruise.github.io/2017/05/20/concurrent-transaction/</loc>
-        <lastmod>2018-01-14T12:57:44.835Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
