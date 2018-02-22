@@ -549,6 +549,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/软件工程/" itemprop="url" rel="index">
+                    <span itemprop="name">软件工程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -577,34 +599,15 @@
 
       
         
-          
-            <p><img src="/img/Devops.png" alt=""></p>
-<p>对于很多做工程的同学来说，近两年可能都会听说DevOps这个概念。那么DevOps究竟是什么呢？它和传统的平台和开发流程有什么区别和优势呢？最近正好跟着一家公司一起做了一个DevOps平台，也算是对DevOps使用和工程实现有一定的了解，下面就由我给大家做个入门级的介绍。</p>
-<p>DevOps严格来讲，应该算是一种软件开发、交付思想模式。我们在大学上过软件工程这么课的话，应该是知道什么瀑布式开发模型、迭代式开发模型这么软件开发模式，如果要将DevOps归类到这里面的话，我认为应该将其归类到迭代式开发模型的最新、大型工程最流行的版本。它和传统的迭代式开发模型的主要区别也是在软件的开发和交付上。下面我会先介绍一下我所理解的传统开发模式。</p>
-<h2 id="传统开发模式"><a href="#传统开发模式" class="headerlink" title="传统开发模式"></a>传统开发模式</h2><p>在一个传统的大型软件开发团队中，一般会有研发和运维两个团队，而且这两个团队的界限是非常明显的。传统模式下，PM将需求提出来，RD根据需求写代码，自测完成后打包在测试环境下运行，QA测试完成后通知运维OPS上线，OPS进行上线部署，最后整个需求得到release。</p>
-<p>传统模式的优势在于：分工清晰，各自只需要负责自己的部分。</p>
-<p>它的劣势也很明显：沟通成本与等待成本高，导致迭代慢，交接每一个环节都有成为瓶颈的风险。</p>
-<h2 id="DevOps"><a href="#DevOps" class="headerlink" title="DevOps"></a>DevOps</h2><p>DevOps的名面上的意思是“开发运维一体化”。在DevOps开发模式下，开发人员和运维人员并没有特定的分界线，应用开发人员需要承担一定的运维工作，而运维（开发）人员则专门维护基础设施和开发DevOps平台。但是这个里面开发人员做的运维工作又和传统运维是不太一样的，这里并不需要开发人员像传统模式一样直接在物理机器上去做运维工作，而是直接通过编写构建文件（比如Dockerfile）和编排文件（xxx.yaml）来实现。为什么呢？</p>
-<p>一个DevOps系统核心主要是两个：持续集成（CI，Continous integration）、持续交付（CD，Continuous delivery）。CI主要是基于自动化测试工具、源码分析、构建工具、容器来实现的，比如Jenkins+Sonar+Docker等工具。而CD主要是基于容器和容器的编排工具来实现的，比如Docker+K8S、Swarm等。因此，通过DevOps系统，开发人员通过构建文件和编排文件就能在容器上做运维，并不需要在更底层做运维，运维难度其实降低了很多。</p>
-<p>下面以我所参与的博云DevOps平台来说明一下DevOps的一般流程，如下图所示。基本可以看作开发、测试、构建、部署、监控、反馈这6个流程形成的闭环。</p>
-<p><img src="/img/BOC-DevOps流程图.png" alt=""></p>
-<p>一个比较好的DevOps系统应该是对大型系统带来的好处应该是很明显的，主要是加快迭代发布效率，减少发布出错的风险。DevOps的劣势应该就是让开发人员还需要学习一些运维技能，在DevOps上主要就是写构建文件和编排文件了。不过对于大型的微服务架构系统而言，我认为DevOps的优势是远远大于劣势的。</p>
-<h2 id="DevOps的技术栈"><a href="#DevOps的技术栈" class="headerlink" title="DevOps的技术栈"></a>DevOps的技术栈</h2><p>根据博云的DevOps系统，我所了解的DevOps系统主要用到了下面的技术栈：</p>
-<ul>
-<li>版本控制：Git、SVN</li>
-<li>构建工具：Jenkins、Sonar、Docker</li>
-<li>编排工具：Kubernetes、Swarm、Docker</li>
-<li>容器网络：Calico、Flannel</li>
-<li>状态管理：ETCD、ZooKeeper</li>
-<li>资源调度：Mesos、YARN</li>
-<li>存储：NFS、Gluster</li>
-<li>监控：ELK、Zabbix</li>
-</ul>
-<h2 id="DevOps的难点和要解决的问题"><a href="#DevOps的难点和要解决的问题" class="headerlink" title="DevOps的难点和要解决的问题"></a>DevOps的难点和要解决的问题</h2><p>DevOps是为了追求工程效率最大化而存在的，但是工程效率和稳定性的目标在大部分场景下都是相悖的，如何能够在工程效率提升的前提下，保证稳定性不出问题？</p>
-<p>这个问题我觉得应该是根据现在的工程而定。开发人员所做的运维工作不能过多过于复杂，当开发人员花了很多精力在运维工作上的时候，这个DevOps系统就做的比较失败了。再一个，如果一个DevOps非常追求工程效率而使得系统的稳定性没有保障的时候，DevOps系统也是比较失败的，服务的质量必须处于最高的优先级。能在保障这两点的情况下实现最高工程效率的DevOps就是好DevOps。</p>
-<p>还有一点，是不是用了DevOps就是好呢？或者说一定要用DevOps呢？实际上开发一个DevOps是非常复杂的，涉及到的技术栈非常多，开发起来需要消耗大量的精力和财力。如果是初创公司一个没有几台机器的单一业务，是不太建议上DevOps的，实在是太浪费了，直接使用传统开发+运维的模式就可以了。但是对于大型的微服务应用，DevOps能够很好的保证其快速迭代发布、自动化运维以及高可用等特性，在这上面实施DevOps就会有非常好的效果。因此，DevOps和传统模式没有好坏之分，只有适不适合。</p>
-
-          
+          <p><img src="/img/Devops.png" alt=""></p>
+<p>对于很多做工程的同学来说，近两年可能都会听说DevOps这个概念，很多国内的互联网公司都已经有了成熟的DevOps解决方案。那么DevOps究竟是什么呢？它和传统的平台和开发流程有什么区别和优势呢？最近正好跟着一家公司一起做了一个DevOps平台，也算是对DevOps使用和工程实现有一定的了解，下面就由我给大家做个入门级的介绍。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/11/20/devops/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1141,7 +1144,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -1152,7 +1155,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">21</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
