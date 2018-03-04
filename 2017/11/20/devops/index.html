@@ -119,21 +119,20 @@
 
 
 
-<meta name="description" content="对于很多做工程的同学来说，近两年可能都会听说DevOps这个概念，很多国内的互联网公司都已经有了成熟的DevOps解决方案。那么DevOps究竟是什么呢？它和传统的平台和开发流程有什么区别和优势呢？最近正好跟着一家公司一起做了一个DevOps平台，也算是对DevOps使用和工程实现有一定的了解，下面就由我给大家做个入门级的介绍。">
+<meta name="description" content="对于很多做软件工程的同学来说，近两年可能都会听说DevOps这个概念，很多国内的互联网公司都已经有了成熟的DevOps解决方案。那么DevOps究竟是什么呢？它和传统的平台和开发流程有什么区别和优势呢？最近正好跟着一家公司一起做了一个DevOps平台，也算是对DevOps使用和工程实现有一定的了解，下面就由我给大家做个入门级的介绍。">
 <meta name="keywords" content="软件工程,运维,DevOps">
 <meta property="og:type" content="article">
 <meta property="og:title" content="云计算时代的软件开发模式-DevOps">
 <meta property="og:url" content="http://lioncruise.github.io/2017/11/20/devops/index.html">
 <meta property="og:site_name" content="Cassini">
-<meta property="og:description" content="对于很多做工程的同学来说，近两年可能都会听说DevOps这个概念，很多国内的互联网公司都已经有了成熟的DevOps解决方案。那么DevOps究竟是什么呢？它和传统的平台和开发流程有什么区别和优势呢？最近正好跟着一家公司一起做了一个DevOps平台，也算是对DevOps使用和工程实现有一定的了解，下面就由我给大家做个入门级的介绍。">
+<meta property="og:description" content="对于很多做软件工程的同学来说，近两年可能都会听说DevOps这个概念，很多国内的互联网公司都已经有了成熟的DevOps解决方案。那么DevOps究竟是什么呢？它和传统的平台和开发流程有什么区别和优势呢？最近正好跟着一家公司一起做了一个DevOps平台，也算是对DevOps使用和工程实现有一定的了解，下面就由我给大家做个入门级的介绍。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://lioncruise.github.io/img/Devops.png">
 <meta property="og:image" content="http://lioncruise.github.io/img/BOC-DevOps流程图.png">
-<meta property="og:updated_time" content="2018-02-22T14:34:26.461Z">
+<meta property="og:updated_time" content="2018-03-04T14:01:32.442Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="云计算时代的软件开发模式-DevOps">
-<meta name="twitter:description" content="对于很多做工程的同学来说，近两年可能都会听说DevOps这个概念，很多国内的互联网公司都已经有了成熟的DevOps解决方案。那么DevOps究竟是什么呢？它和传统的平台和开发流程有什么区别和优势呢？最近正好跟着一家公司一起做了一个DevOps平台，也算是对DevOps使用和工程实现有一定的了解，下面就由我给大家做个入门级的介绍。">
-<meta name="twitter:image" content="http://lioncruise.github.io/img/Devops.png">
+<meta name="twitter:description" content="对于很多做软件工程的同学来说，近两年可能都会听说DevOps这个概念，很多国内的互联网公司都已经有了成熟的DevOps解决方案。那么DevOps究竟是什么呢？它和传统的平台和开发流程有什么区别和优势呢？最近正好跟着一家公司一起做了一个DevOps平台，也算是对DevOps使用和工程实现有一定的了解，下面就由我给大家做个入门级的介绍。">
+<meta name="twitter:image" content="http://lioncruise.github.io/img/BOC-DevOps流程图.png">
 
 
 
@@ -459,8 +458,7 @@
       
 
       
-        <p><img src="/img/Devops.png" alt=""></p>
-<p>对于很多做工程的同学来说，近两年可能都会听说DevOps这个概念，很多国内的互联网公司都已经有了成熟的DevOps解决方案。那么DevOps究竟是什么呢？它和传统的平台和开发流程有什么区别和优势呢？最近正好跟着一家公司一起做了一个DevOps平台，也算是对DevOps使用和工程实现有一定的了解，下面就由我给大家做个入门级的介绍。</p>
+        <p>对于很多做软件工程的同学来说，近两年可能都会听说DevOps这个概念，很多国内的互联网公司都已经有了成熟的DevOps解决方案。那么DevOps究竟是什么呢？它和传统的平台和开发流程有什么区别和优势呢？最近正好跟着一家公司一起做了一个DevOps平台，也算是对DevOps使用和工程实现有一定的了解，下面就由我给大家做个入门级的介绍。</p>
 <a id="more"></a>
 <p>DevOps严格来讲，应该算是一种软件开发、交付思想模式。我们在大学上过软件工程这么课的话，应该是知道什么瀑布式开发模型、迭代式开发模型这么软件开发模式，如果要将DevOps归类到这里面的话，我认为应该将其归类到迭代式开发模型的最新、大型工程最流行的版本。它和传统的迭代式开发模型的主要区别也是在软件的开发和交付上。下面我会先介绍一下我所理解的传统开发模式。</p>
 <h2 id="传统开发模式"><a href="#传统开发模式" class="headerlink" title="传统开发模式"></a>传统开发模式</h2><p>在一个传统的大型软件开发团队中，一般会有研发和运维两个团队，而且这两个团队的界限是非常明显的。传统模式下，PM将需求提出来，RD根据需求写代码，自测完成后打包在测试环境下运行，QA测试完成后通知运维OPS上线，OPS进行上线部署，最后整个需求得到release。</p>
@@ -679,7 +677,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -690,7 +688,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -701,7 +699,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-count">22</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

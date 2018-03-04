@@ -57,7 +57,14 @@
 
     <url>
         <loc>http://lioncruise.github.io/categories/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/</loc>
-        <lastmod>2018-02-22T14:34:26.461Z</lastmod>
+        <lastmod>2018-03-04T14:01:32.442Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://lioncruise.github.io/categories/%E8%B0%83%E5%BA%A6/</loc>
+        <lastmod>2018-03-04T14:11:17.831Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>

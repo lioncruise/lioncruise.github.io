@@ -7,8 +7,16 @@
     </url>
 
     <url>
+        <loc>http://lioncruise.github.io/2018/03/04/k8s-scheduling/</loc>
+        <lastmod>2018-03-04T14:11:17.831Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
         <loc>http://lioncruise.github.io/2017/11/20/devops/</loc>
-        <lastmod>2018-02-22T14:34:26.461Z</lastmod>
+        <lastmod>2018-03-04T14:01:32.442Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
