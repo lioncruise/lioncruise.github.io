@@ -803,7 +803,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://lioncruise.github.io/2016/10/08/kmp/">
+    <link itemprop="mainEntityOfPage" href="http://lioncruise.github.io/2016/02/12/java-constant-pool/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="lioncruise(覃世军)">
@@ -822,7 +822,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2016/10/08/kmp/" itemprop="url">字符串匹配的KMP算法</a></h1>
+                <a class="post-title-link" href="/2016/02/12/java-constant-pool/" itemprop="url">Java-constant-pool</a></h1>
         
 
         <div class="post-meta">
@@ -834,8 +834,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-10-08T09:06:27+08:00">
-                2016-10-08
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-02-12T21:50:38+08:00">
+                2016-02-12
               </time>
             
 
@@ -844,28 +844,6 @@
             
           </span>
 
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/算法/" itemprop="url" rel="index">
-                    <span itemprop="name">算法</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -895,17 +873,10 @@
 
       
         
-          <p>本文转载自<a href="http://www.ruanyifeng.com/blog/2013/05/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm.html" target="_blank" rel="noopener">阮一峰老师的博客</a>。</p>
-<p>字符串匹配是计算机的基本任务之一。</p>
-<p>举例来说，有一个字符串<code>&quot;BBC ABCDAB ABCDABCDABDE&quot;</code>，我想知道，里面是否包含另一个字符串<code>&quot;ABCDABD&quot;</code>？</p>
-<p>许多算法可以完成这个任务，Knuth-Morris-Pratt算法（简称KMP）是最常用的之一。它以三个发明者命名，起头的那个K就是著名科学家Donald Knuth。</p>
-<p>这种算法不太容易理解，网上有很多解释，但读起来都很费劲。直到读到Jake Boxer的文章，我才真正理解这种算法。下面，我用自己的语言，试图写一篇比较好懂的KMP算法解释。</p>
-<p>1.</p>
-<p><img src="http://image.beekka.com/blog/201305/bg2013050103.png" alt=""></p>
-<p>首先，字符串”BBC ABCDAB ABCDABCDABDE”的第一个字符与搜索词”ABCDABD”的第一个字符，进行比较。因为B与A不匹配，所以搜索词后移一位。</p>
+          <p>在Java的内存分配中，经常听到很多关于常量池的描述，我开始看的时候也是看的很模糊，网上五花八门的说法简直太多了，最后查阅各种资料，终于算是差不多理清了，很多网上说法都有问题，下面我会尝试着来区分一下这几个概念，如果有错误望读者指正。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/10/08/kmp/#more" rel="contents">
+            <a class="btn" href="/2016/02/12/java-constant-pool/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1143,7 +1114,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-count">18</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1154,7 +1125,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -1165,7 +1136,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

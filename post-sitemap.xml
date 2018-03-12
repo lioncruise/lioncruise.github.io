@@ -7,6 +7,14 @@
     </url>
 
     <url>
+        <loc>http://lioncruise.github.io/2016/02/12/java-constant-pool/</loc>
+        <lastmod>2018-03-12T14:04:34.251Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
         <loc>http://lioncruise.github.io/2018/03/04/k8s-scheduling/</loc>
         <lastmod>2018-03-04T14:11:17.831Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -47,24 +55,8 @@
     </url>
 
     <url>
-        <loc>http://lioncruise.github.io/2016/02/10/classloader/</loc>
-        <lastmod>2018-01-14T12:57:26.376Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
         <loc>http://lioncruise.github.io/2016/02/11/java-volatile/</loc>
         <lastmod>2018-01-14T12:57:09.227Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>http://lioncruise.github.io/2016/02/10/jvm-class-load/</loc>
-        <lastmod>2018-01-14T12:56:55.200Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
@@ -137,14 +129,6 @@
     <url>
         <loc>http://lioncruise.github.io/2016/12/20/virtualenv/</loc>
         <lastmod>2018-01-14T12:52:32.173Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>http://lioncruise.github.io/2016/10/08/kmp/</loc>
-        <lastmod>2018-01-14T12:49:34.222Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
