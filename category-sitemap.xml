@@ -28,13 +28,6 @@
     </url>
 
     <url>
-        <loc>http://lioncruise.github.io/categories/Java/</loc>
-        <lastmod>2018-01-14T12:57:09.227Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
         <loc>http://lioncruise.github.io/categories/Kubernetes/</loc>
         <lastmod>2018-01-29T14:38:55.804Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -58,6 +51,13 @@
     <url>
         <loc>http://lioncruise.github.io/categories/%E8%B0%83%E5%BA%A6/</loc>
         <lastmod>2018-03-04T14:11:17.831Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://lioncruise.github.io/categories/Java/</loc>
+        <lastmod>2018-03-12T14:07:43.272Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
