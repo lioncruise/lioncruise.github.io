@@ -7,6 +7,14 @@
     </url>
 
     <url>
+        <loc>http://lioncruise.github.io/2016/11/20/linux-io/</loc>
+        <lastmod>2018-03-21T15:05:21.468Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
         <loc>http://lioncruise.github.io/2016/02/12/java-constant-pool/</loc>
         <lastmod>2018-03-12T14:07:43.272Z</lastmod>
         <changefreq>weekly</changefreq>
