@@ -106,7 +106,7 @@
 
 
 
-  <meta name="keywords" content="Java," />
+  <meta name="keywords" content="分布式系统,Kubernetes,高可用," />
 
 
 
@@ -119,18 +119,23 @@
 
 
 
-<meta name="description" content="首先，我来看一下设计模式中常见的代理模式，也就是所谓的静态代理。">
-<meta name="keywords" content="Java">
+<meta name="description" content="这两个月和博云合作的项目是要用于客户生产环境的，这个和我以前做的东西有很大的不同，所有基础架构必须给出高可用的解决方案。在这之前我只做过一些流量较小的用户产品或者一些原型项目，一开始基础架构都只给出了单节点的解决方案，结果被大师兄喷这个在生产环境根本不可用。不过事实确实是在一个真实的分布式系统中硬件损坏、进程崩溃、网络不通都可能直接导致系统不可用">
+<meta name="keywords" content="分布式系统,Kubernetes,高可用">
 <meta property="og:type" content="article">
-<meta property="og:title" content="为什么要使用动态代理？">
-<meta property="og:url" content="http://lioncruise.github.io/2015/12/01/jdk-dynamic-proxy/index.html">
+<meta property="og:title" content="高可用背后的原理">
+<meta property="og:url" content="http://lioncruise.github.io/2017/10/24/k8s-HA-principle/index.html">
 <meta property="og:site_name" content="Cassini">
-<meta property="og:description" content="首先，我来看一下设计模式中常见的代理模式，也就是所谓的静态代理。">
+<meta property="og:description" content="这两个月和博云合作的项目是要用于客户生产环境的，这个和我以前做的东西有很大的不同，所有基础架构必须给出高可用的解决方案。在这之前我只做过一些流量较小的用户产品或者一些原型项目，一开始基础架构都只给出了单节点的解决方案，结果被大师兄喷这个在生产环境根本不可用。不过事实确实是在一个真实的分布式系统中硬件损坏、进程崩溃、网络不通都可能直接导致系统不可用">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-01-14T12:56:06.237Z">
+<meta property="og:image" content="http://lioncruise.github.io/img/ETCD选举leader.png">
+<meta property="og:image" content="http://lioncruise.github.io/img/ETCD重新选举leader.png">
+<meta property="og:image" content="http://lioncruise.github.io/img/脑裂现象.png">
+<meta property="og:image" content="http://lioncruise.github.io/img/zw_k8s04.png">
+<meta property="og:updated_time" content="2018-05-02T12:19:51.530Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="为什么要使用动态代理？">
-<meta name="twitter:description" content="首先，我来看一下设计模式中常见的代理模式，也就是所谓的静态代理。">
+<meta name="twitter:title" content="高可用背后的原理">
+<meta name="twitter:description" content="这两个月和博云合作的项目是要用于客户生产环境的，这个和我以前做的东西有很大的不同，所有基础架构必须给出高可用的解决方案。在这之前我只做过一些流量较小的用户产品或者一些原型项目，一开始基础架构都只给出了单节点的解决方案，结果被大师兄喷这个在生产环境根本不可用。不过事实确实是在一个真实的分布式系统中硬件损坏、进程崩溃、网络不通都可能直接导致系统不可用">
+<meta name="twitter:image" content="http://lioncruise.github.io/img/ETCD选举leader.png">
 
 
 
@@ -160,13 +165,13 @@
 
 
 
-  <link rel="canonical" href="http://lioncruise.github.io/2015/12/01/jdk-dynamic-proxy/"/>
+  <link rel="canonical" href="http://lioncruise.github.io/2017/10/24/k8s-HA-principle/"/>
 
 
 
 
 
-  <title>为什么要使用动态代理？ | Cassini</title>
+  <title>高可用背后的原理 | Cassini</title>
   
 
 
@@ -362,7 +367,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://lioncruise.github.io/2015/12/01/jdk-dynamic-proxy/">
+    <link itemprop="mainEntityOfPage" href="http://lioncruise.github.io/2017/10/24/k8s-HA-principle/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="lioncruise(覃世军)">
@@ -379,7 +384,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">为什么要使用动态代理？</h1>
+          <h1 class="post-title" itemprop="name headline">高可用背后的原理</h1>
         
 
         <div class="post-meta">
@@ -391,8 +396,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-12-01T10:44:10+08:00">
-                2015-12-01
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-24T18:50:32+08:00">
+                2017-10-24
               </time>
             
 
@@ -414,8 +419,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
+                  <a href="/categories/分布式系统/" itemprop="url" rel="index">
+                    <span itemprop="name">分布式系统</span>
                   </a>
                 </span>
 
@@ -456,17 +461,23 @@
       
 
       
-        <p>首先，我来看一下设计模式中常见的代理模式，也就是所谓的静态代理。</p>
-<a id="more"></a>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Subject</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RealSubject</span> <span class="keyword">implements</span> <span class="title">Subject</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"call doSomething()"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SubjectProxy</span> <span class="keyword">implements</span> <span class="title">Subject</span> </span>&#123;</span><br><span class="line">    Subject subimpl = <span class="keyword">new</span> RealSubject();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">before</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"before doSomething()"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">after</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"after doSomething()"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 代理RealSubject的doSomething()方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// <span class="doctag">TODO:</span>前置增强</span></span><br><span class="line">        before();</span><br><span class="line"></span><br><span class="line">        subimpl.doSomething();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// <span class="doctag">TODO:</span>后置增强</span></span><br><span class="line">        after();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestProxy</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">        Subject sub = <span class="keyword">new</span> SubjectProxy();</span><br><span class="line">        sub.doSomething();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这种模式通过代理类对原来类的方法实现了封装和增强，即在原来的方法的前后嵌入代码片段。这种方法比较容易看懂，但是静态代理的这种写法有一个很大的问题，就是在一个类要增强的方法越来越多的时候，代理需要分别对每个方法进行增强，这样使代理类的代码量非常庞大。</p>
-<p>因此，就引入了动态代理来解决这个问题。看一下代码：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.lang.reflect.InvocationHandler;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Proxy;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Subject</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething1</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething2</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RealSubject</span> <span class="keyword">implements</span> <span class="title">Subject</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething1</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"call doSomething 1()"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething2</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"call doSomething 2()"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ProxyHandler</span> <span class="keyword">implements</span> <span class="title">InvocationHandler</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Object tar;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">before</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"before call"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">after</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"after call"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 绑定委托对象，并返回代理类</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">bind</span><span class="params">(Object tar)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.tar = tar;</span><br><span class="line">        <span class="comment">// 绑定该类实现的所有接口，取得代理类</span></span><br><span class="line">        <span class="keyword">return</span> Proxy.newProxyInstance(tar.getClass().getClassLoader(), tar.getClass().getInterfaces(), <span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">        Object result = <span class="keyword">null</span>;</span><br><span class="line">        <span class="comment">// 这里就可以进行所谓的AOP编程了</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// <span class="doctag">TODO:</span>前置增强</span></span><br><span class="line">        before();</span><br><span class="line"></span><br><span class="line">        result = method.invoke(tar, args);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// <span class="doctag">TODO:</span>后置增强</span></span><br><span class="line">        after();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestProxy</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">        ProxyHandler proxy = <span class="keyword">new</span> ProxyHandler();</span><br><span class="line">        <span class="comment">// 绑定该类实现的所有接口</span></span><br><span class="line">        Subject sub = (Subject) proxy.bind(<span class="keyword">new</span> RealSubject());</span><br><span class="line">        sub.doSomething1();</span><br><span class="line">        sub.doSomething2();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>打印结果：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">before call</span><br><span class="line">call doSomething 1()</span><br><span class="line">after call</span><br><span class="line">before call</span><br><span class="line">call doSomething 2()</span><br><span class="line">after call</span><br></pre></td></tr></table></figure>
-<p>看完这段代码，相信大家应该已经非常清楚Java动态代理的作用了。<strong>就是将Proxy类的代码量固定下来，不会因为被代理类的业务逐渐增大而增大</strong>。</p>
-<p>实际上，Spring的AOP和AspectJ就是基于动态代理技术实现的，而且它们能在配置文件中设置一些信息使代理更好用，更灵活。这也是Spring为什么这么受欢迎的原因之一，用SpringAOP代替JDK动态代理，让面向切面编程更容易实现。</p>
-<p>现在Java的动态代理主要分为Java自己提供的JDK动态代理和CGLib(Code Generation Library)。JDK动态代理只能代理接口类，而CGLib这种则是直接修改字节码。</p>
+        <p>这两个月和博云合作的项目是要用于客户生产环境的，这个和我以前做的东西有很大的不同，所有基础架构必须给出高可用的解决方案。在这之前我只做过一些流量较小的用户产品或者一些原型项目，一开始基础架构都只给出了单节点的解决方案，结果被大师兄喷这个在生产环境根本不可用。不过事实确实是在一个真实的分布式系统中硬件损坏、进程崩溃、网络不通都可能直接导致系统不可用<a id="more"></a>，所以后来花了很大的精力将项目的基础架构层面改造成完全高可用的，这个过程对一个之前完全没做过这方面东西的人来说确实会感觉比较困难，不过在这个过程中也确实实践了不少分布式系统的理论，了解了各种各样的高可用解决方案，也对Kubernetes的架构运行原理有了更加深刻的认识。下面我会从我调研的高可用解决方案的各个细节来给大家介绍一下高可用的Kubernetes集群背后的原理。</p>
+<h2 id="ETCD高可用"><a href="#ETCD高可用" class="headerlink" title="ETCD高可用"></a>ETCD高可用</h2><p>Kubernetes使用ETCD持久化存储集群状态信息。ETCD是CoreOS开源的一个强一致性的分布式键值存储服务，ETCD使用raft算法将一组主机组成集群，集群中的每个节点都可以根据集群运行的情况在三种状态间切换：follower, candidate 与 leader。leader 和 follower 之间保持心跳。如果follower在一段时间内没有收到来自leader的心跳，就会转为candidate，发出新的选主请求。</p>
+<p>集群初始化的时候内部的节点都是follower节点，之后会有一个节点因为没有收到leader的心跳转为candidate节点，发起选主请求。当这个节点获得了大于一半节点的投票后会转为leader节点。</p>
+<p><img src="/img/ETCD选举leader.png" alt=""></p>
+<p>当leader节点服务异常后，其中的某个follower节点因为没有收到leader的心跳转为candidate节点，发起选主请求。只要集群中剩余的正常节点数目大于集群内主机数目的一半，ETCD集群就可以正常对外提供服务。</p>
+<p><img src="/img/ETCD重新选举leader.png" alt=""></p>
+<p>当集群内部的网络出现故障集群可能会出现“脑裂”问题，这个时候集群会分为一大一小两个集群（奇数节点的集群），较小的集群会处于异常状态，较大的集群可以正常对外提供服务。</p>
+<p><img src="/img/脑裂现象.png" alt=""></p>
+<p>ETCD的作用是用来存储，其高可用的很大一个作用是用来备份存储的数据，因此它基于Raft的高可用解决方案会使每个节点都在工作。还有一个值得注意的一点，ETCD 2个节点是不能实现高可用的，最少需要3个节点，这个是Raft协议的特性使之的，大家感兴趣可以去读一下Raft的论文。</p>
+<h2 id="controller-manager和scheduler的高可用"><a href="#controller-manager和scheduler的高可用" class="headerlink" title="controller manager和scheduler的高可用"></a>controller manager和scheduler的高可用</h2><p>Kubernetes使用scheduler、controller manager来实现pod的调度和rc、deployment等的副本控制。Kubernetes也是通过controller manager和应用健康检查机制实现了它上面部署应用的高可用。而scheduler、controller manager的高可用原理和上面又是不一样的，为了保证集群运行正常，scheduler、controller manager同一时刻只允许一个服务处以具体的任务。Kubernetes中实现了一套简单的类似于分布式锁的方案，依赖ETCD实现scheduler和controller-manager的选主功能。</p>
+<p>如果scheduler和controller manager在启动的时候设置了 <code>--leader-elect</code> 参数，它们在启动后会先尝试获取leader节点身份，只有在获取leader节点身份后才可以执行具体的业务逻辑。它们分别会在ETCD中创建scheduler和controller manager的endpoint，endpoint的信息中记录了当前的leader节点信息，以及记录的上次更新时间。leader节点会定期更新endpoint的信息，维护自己的leader身份。每个从节点的服务都会定期检查endpoint的信息，如果endpoint的信息在时间范围内没有更新，它们会尝试更新自己为leader节点。scheduler服务以及controller manager服务之间不会进行通信，利用ETCD的强一致性，能够保证在分布式高并发情况下leader节点的全局唯一性。</p>
+<p><img src="/img/zw_k8s04.png" alt=""></p>
+<p>当集群中的leader节点服务异常后，其它节点的服务会尝试更新自身为leader节点，当有多个节点同时更新endpoint时，由Etcd保证只有一个服务的更新请求能够成功。通过这种机制sheduler和controller manager可以保证在leader节点宕机后其它的节点可以顺利选主，保证服务故障后快速恢复。</p>
+<h2 id="apiserver的高可用"><a href="#apiserver的高可用" class="headerlink" title="apiserver的高可用"></a>apiserver的高可用</h2><p>Kubernetes的接入层服务主要是kube-apiserver，官方文档上说apiserver是Kubernetes资源的唯一入口。其实后来根据我对Kubernetes的使用和对其源码的阅读，可以看作apiserver实现了Kubernetes对象的model存到ETCD里面，然后自己作为一个RESTful的HTTP server和外界交互作CRUD操作。apiserver是无状态的，无状态的意思是在哪个apiserver上面接收请求都会得到相同的结果，我们可以同时开多个apiserver处理外部请求，这一点是和scheduler和controller manager不同的。因此apiserver的高可用没必要像scheduler、controller manager一样通过分布式锁强一致性实现同一时间只有一个leader在工作。</p>
+<p>而使用多活apiserver的最大难点是如何实现能保证高可用的负载均衡，为了解决这个问题主要使用了keepalived和Nginx。可以使用keepalived配置节点的优先级和检测失活脚本，然后可以给外部一个同一的VIP，并且保证机器肯定能接收到请求，然后配置Nginx可以将请求负载到可用的apiserver上。</p>
+<p>使用keepalived、Nginx这种IP漂移、负载均衡的方式比分布式锁服务保持单个leader这种方式可以保持多个实例、性能更高。</p>
+<p>除了这个三个主要的之外，我还做了一些例如kube-DNS、CNI插件Calico、Docker镜像仓库的高可用。但是这些都可以是可以基于Kubernetes的副本控制去做的，这里我就只说明一下Kubernetes自身高可用的解决方案，其他就不赘述了。</p>
 
       
     </div>
@@ -513,7 +524,11 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Java/" rel="tag"># Java</a>
+            <a href="/tags/分布式系统/" rel="tag"># 分布式系统</a>
+          
+            <a href="/tags/Kubernetes/" rel="tag"># Kubernetes</a>
+          
+            <a href="/tags/高可用/" rel="tag"># 高可用</a>
           
         </div>
       
@@ -526,8 +541,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/11/29/java-reflection/" rel="next" title="对Java反射机制的一点见解">
-                <i class="fa fa-chevron-left"></i> 对Java反射机制的一点见解
+              <a href="/2017/10/05/kubeadm-install-ha-k8s/" rel="next" title="基于kubeadm部署高可用Kubernetes集群">
+                <i class="fa fa-chevron-left"></i> 基于kubeadm部署高可用Kubernetes集群
               </a>
             
           </div>
@@ -536,8 +551,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/02/06/JVM-memory-strategy/" rel="prev" title="JVM内存分配回收策略">
-                JVM内存分配回收策略 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/11/20/devops/" rel="prev" title="云计算时代的软件开发模式-DevOps">
+                云计算时代的软件开发模式-DevOps <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -628,8 +643,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -710,6 +734,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ETCD高可用"><span class="nav-number">1.</span> <span class="nav-text">ETCD高可用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#controller-manager和scheduler的高可用"><span class="nav-number">2.</span> <span class="nav-text">controller manager和scheduler的高可用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#apiserver的高可用"><span class="nav-number">3.</span> <span class="nav-text">apiserver的高可用</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
