@@ -72,13 +72,6 @@
     </url>
 
     <url>
-        <loc>http://lioncruise.github.io/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/</loc>
-        <lastmod>2018-03-04T14:01:32.442Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
         <loc>http://lioncruise.github.io/tags/%E8%BF%90%E7%BB%B4/</loc>
         <lastmod>2018-03-04T14:01:32.442Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -151,6 +144,13 @@
     <url>
         <loc>http://lioncruise.github.io/tags/%E9%AB%98%E5%8F%AF%E7%94%A8/</loc>
         <lastmod>2018-05-02T12:19:51.530Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://lioncruise.github.io/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/</loc>
+        <lastmod>2018-06-10T08:49:30.033Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>

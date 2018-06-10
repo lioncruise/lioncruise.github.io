@@ -106,7 +106,7 @@
 
 
 
-  <meta name="keywords" content="分布式系统,事务,数据库," />
+  <meta name="keywords" content="软件工程," />
 
 
 
@@ -119,27 +119,20 @@
 
 
 
-<meta name="description" content="并发事务的问题当同一个数据（对象）被并发事务访问的时候，会有什么问题？  上面的场景可以理解为：同一个账户两笔转账并发发生会怎么样？假设X初始值为100，那么最终X会变为多少？">
-<meta name="keywords" content="分布式系统,事务,数据库">
+<meta name="description" content="许多年前，我们开发的软件还是C/S和MVC的形式，再后来有了SOA，最近几年又出现了微服务架构，更新一点的有Cloud Native应用，企业应用从单体架构，到服务化，再到更细粒度的微服务化，应用开发之初就是为了应对互联网的特有的高并发、不间断的特性，需要很高的性能和可扩展性，人们对软件开发的追求孜孜不倦，希望力求在软件开发的复杂度和效率之间达到一个平衡。">
+<meta name="keywords" content="软件工程">
 <meta property="og:type" content="article">
-<meta property="og:title" content="十分钟了解并发事务">
-<meta property="og:url" content="http://lioncruise.github.io/2017/05/20/concurrent-transaction/index.html">
+<meta property="og:title" content="服务架构和云计算的最新发展形态：Serverless&#x2F;FaaS">
+<meta property="og:url" content="http://lioncruise.github.io/2018/06/10/serverless/index.html">
 <meta property="og:site_name" content="Cassini">
-<meta property="og:description" content="并发事务的问题当同一个数据（对象）被并发事务访问的时候，会有什么问题？  上面的场景可以理解为：同一个账户两笔转账并发发生会怎么样？假设X初始值为100，那么最终X会变为多少？">
+<meta property="og:description" content="许多年前，我们开发的软件还是C/S和MVC的形式，再后来有了SOA，最近几年又出现了微服务架构，更新一点的有Cloud Native应用，企业应用从单体架构，到服务化，再到更细粒度的微服务化，应用开发之初就是为了应对互联网的特有的高并发、不间断的特性，需要很高的性能和可扩展性，人们对软件开发的追求孜孜不倦，希望力求在软件开发的复杂度和效率之间达到一个平衡。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://lioncruise.github.io/img/并发事务访问同一个对象.png">
-<meta property="og:image" content="http://lioncruise.github.io/img/并发事务可能导致不同结果.png">
-<meta property="og:image" content="http://lioncruise.github.io/img/并发事务问题举例1.jpg">
-<meta property="og:image" content="http://lioncruise.github.io/img/并发事务问题举例2.jpg">
-<meta property="og:image" content="http://lioncruise.github.io/img/2PL.png">
-<meta property="og:image" content="http://lioncruise.github.io/img/锁为什么一定要两阶段.png">
-<meta property="og:image" content="http://lioncruise.github.io/img/共享锁排它锁比较.png">
-<meta property="og:image" content="http://lioncruise.github.io/img/MVCC.png">
-<meta property="og:updated_time" content="2018-02-22T09:16:55.793Z">
+<meta property="og:image" content="https://img.colabug.com/2018/01/2c6540960fc2cbbb6b63889c479c977a.gif">
+<meta property="og:updated_time" content="2018-06-10T08:49:30.033Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="十分钟了解并发事务">
-<meta name="twitter:description" content="并发事务的问题当同一个数据（对象）被并发事务访问的时候，会有什么问题？  上面的场景可以理解为：同一个账户两笔转账并发发生会怎么样？假设X初始值为100，那么最终X会变为多少？">
-<meta name="twitter:image" content="http://lioncruise.github.io/img/并发事务访问同一个对象.png">
+<meta name="twitter:title" content="服务架构和云计算的最新发展形态：Serverless&#x2F;FaaS">
+<meta name="twitter:description" content="许多年前，我们开发的软件还是C/S和MVC的形式，再后来有了SOA，最近几年又出现了微服务架构，更新一点的有Cloud Native应用，企业应用从单体架构，到服务化，再到更细粒度的微服务化，应用开发之初就是为了应对互联网的特有的高并发、不间断的特性，需要很高的性能和可扩展性，人们对软件开发的追求孜孜不倦，希望力求在软件开发的复杂度和效率之间达到一个平衡。">
+<meta name="twitter:image" content="https://img.colabug.com/2018/01/2c6540960fc2cbbb6b63889c479c977a.gif">
 
 
 
@@ -169,13 +162,13 @@
 
 
 
-  <link rel="canonical" href="http://lioncruise.github.io/2017/05/20/concurrent-transaction/"/>
+  <link rel="canonical" href="http://lioncruise.github.io/2018/06/10/serverless/"/>
 
 
 
 
 
-  <title>十分钟了解并发事务 | Cassini</title>
+  <title>服务架构和云计算的最新发展形态：Serverless/FaaS | Cassini</title>
   
 
 
@@ -371,7 +364,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://lioncruise.github.io/2017/05/20/concurrent-transaction/">
+    <link itemprop="mainEntityOfPage" href="http://lioncruise.github.io/2018/06/10/serverless/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="lioncruise(覃世军)">
@@ -388,7 +381,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">十分钟了解并发事务</h1>
+          <h1 class="post-title" itemprop="name headline">服务架构和云计算的最新发展形态：Serverless/FaaS</h1>
         
 
         <div class="post-meta">
@@ -400,8 +393,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-20T16:42:43+08:00">
-                2017-05-20
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-10T16:41:04+08:00">
+                2018-06-10
               </time>
             
 
@@ -423,8 +416,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/分布式系统/" itemprop="url" rel="index">
-                    <span itemprop="name">分布式系统</span>
+                  <a href="/categories/软件工程/" itemprop="url" rel="index">
+                    <span itemprop="name">软件工程</span>
                   </a>
                 </span>
 
@@ -465,64 +458,33 @@
       
 
       
-        <h2 id="并发事务的问题"><a href="#并发事务的问题" class="headerlink" title="并发事务的问题"></a>并发事务的问题</h2><p>当同一个数据（对象）被并发事务访问的时候，会有什么问题？</p>
-<p><img src="/img/并发事务访问同一个对象.png" alt=""></p>
-<p>上面的场景可以理解为：同一个账户两笔转账并发发生会怎么样？假设X初始值为100，那么最终X会变为多少？</p>
+        <p>许多年前，我们开发的软件还是C/S和MVC的形式，再后来有了SOA，最近几年又出现了微服务架构，更新一点的有Cloud Native应用，企业应用从单体架构，到服务化，再到更细粒度的微服务化，应用开发之初就是为了应对互联网的特有的高并发、不间断的特性，需要很高的性能和可扩展性，人们对软件开发的追求孜孜不倦，希望力求在软件开发的复杂度和效率之间达到一个平衡。</p>
 <a id="more"></a>
-<p><img src="/img/并发事务可能导致不同结果.png" alt=""></p>
-<p>其原因在于X=X+1并不是一个原子操作，而是Read(X)和Write(X)这两个原子操作的集合。这就导致 同一个对象上的并发事务 可能因为原子操作的不同顺序而导致最终结果不同。</p>
-<h2 id="并发事务的正确性"><a href="#并发事务的正确性" class="headerlink" title="并发事务的正确性"></a>并发事务的正确性</h2><p>如何判断一组 并发事务 正确执行？</p>
-<p><strong>存在</strong>一个顺序，按照这个顺序依次<strong>串行执行</strong>这些事务，得到的结果与并行执行的结果相同。我们就说这个组并发事务是<strong>可串行化</strong>的。这也是判断一组并行事务是否正确执行的标准。如果一组并行事务的执行结果找不到任何一组串行执行的结果与其相同，那么可以说这组并发事务没有正确的执行。比如在上一节的情景中，如果2个并发事务的执行结果为102则正确执行，如果为101则没有正确执行。</p>
-<h2 id="并发事务的4种隔离级别"><a href="#并发事务的4种隔离级别" class="headerlink" title="并发事务的4种隔离级别"></a>并发事务的4种隔离级别</h2><p>数据冲突引起的问题</p>
-<ul>
-<li>read uncommited data（读脏数据）：在T2提交之前，T1读了T2已经修改了的数据</li>
-<li>unrepeatable reads（不可重复读）：在T2提交之前，T1写了T2已经读的数据。如果T2再次读同一个数据，那么将发现两次读取的值不同。因此叫做不可重复读。</li>
-<li>overwrite uncommitted data（更新丢失）：在T2提交之前，T1重写了T2已经修改的数据。</li>
-</ul>
-<pre><code>|         | 读未提交（脏读） | 不可重复读 | 更新丢失   |
-| :-----: | :-----------: | :-------: | :------: |
-|  序列化  | no            | no        | no       |
-| 可重复读 | no            | no        | possible |
-| 读已提交 | no            | possible  | possible |
-| 读未提交 | possible      | possible  | possible |
-</code></pre><p>MySQL事务默认的隔离层级是可重复读，不会出现脏读和幻读现象，但是有可能会有一个事务的更新被另外一个事务的更新覆盖导致更新丢失的现象。</p>
-<p>完全序列化大绝大多数情况下是没有必要的，因为很多并发事务并不会同时访问同一个对象（即没有数据竞争）。使用完全序列化这个隔离级别会极大降低并发的性能。</p>
-<p>针对上面问题的举例：</p>
-<p><img src="/img/并发事务问题举例1.jpg" alt=""></p>
-<p><img src="/img/并发事务问题举例2.jpg" alt=""></p>
-<h2 id="针对并发事务的解决方案"><a href="#针对并发事务的解决方案" class="headerlink" title="针对并发事务的解决方案"></a>针对并发事务的解决方案</h2><p>针对并发事务，主要是两大类解决方案。</p>
-<h3 id="悲观并发控制"><a href="#悲观并发控制" class="headerlink" title="悲观并发控制"></a>悲观并发控制</h3><p>使用悲观并发控制的前提假设是：数据竞争可能经常出现，即并发事务可能经常访问同一个对象。</p>
-<p>悲观并发控制的主要手段是 <strong>防止</strong>，即采用某种机制确保数据竞争不会出现。</p>
-<p>如果一个事务T可能和正在运行的其他事务有冲突，那么就让这个T等待，一直等到有冲突的其他所有事务都完成为止，才开始执行事务T。</p>
-<p>一般，悲观并发控制使用加锁协议来实现，对事务中的读写数据进行加锁，通常采用 <strong>两阶段加锁</strong>（2 Phase Locking，2PL）。</p>
-<p>2PL:</p>
-<ul>
-<li>对每个访问的数据都要加锁之后才能访问</li>
-<li>在事务开始的时候，对每个需要访问的数据加锁。如果不能加锁，就等待，直到加锁成功。加锁成功之后，执行事务内容。在事务提交之前，集中进行解锁。最后，事务提交。</li>
-<li>有一个<strong>集中</strong>的加锁阶段和一个<strong>集中</strong>的解锁阶段，两阶段加锁由此得名。</li>
-</ul>
-<p><img src="/img/2PL.png" alt=""></p>
-<p>如上图，使用2PL之后，两个会访问同一个对象的并发事务不会同一时刻执行。</p>
-<p>悲观锁为什么一定要集中在事务开始和事务提交两个阶段呢？</p>
-<p><img src="/img/锁为什么一定要两阶段.png" alt=""></p>
-<p>上面这个图，在保证没有脏读和幻读的情况下，就会出现事务T2更新丢失的情况。</p>
-<h3 id="悲观锁的实现"><a href="#悲观锁的实现" class="headerlink" title="悲观锁的实现"></a>悲观锁的实现</h3><ul>
-<li>Shared lock(<strong>共享锁</strong>，S)：保护读操作</li>
-<li>Exclusive lock(<strong>排它锁</strong>，X)：保护写操作</li>
-</ul>
-<p><img src="/img/共享锁排它锁比较.png" alt=""></p>
-<p>一个对象被一个读锁占用，可以同时被另外一个读锁占用，但是不能被写锁占用。一个对象被一个写锁占用，不能被其他的读锁或写锁占用。</p>
-<p>数据库锁的实现粒度也是不同的。锁的对象可以是表、行（记录）、索引等。</p>
-<p>Intent lock（<strong>意向锁</strong>）<strong>是为了提高封锁子系统的效率</strong>：</p>
-<ul>
-<li>意向读锁 IS(a)：将对a下面更细粒度的数据元素进行读</li>
-<li>意向写锁 IX(a)：将对a下面更细粒度的数据元素进行写</li>
-</ul>
-<p>为了得到S、IS，所有祖先必须为IS或IX。为了得到X、IX，所有祖先必须为IX（不能为IS，如果祖先是IS，那么别的事务就可以对祖先申请S锁，这与那个子孙对象是X锁显然是相矛盾的）。</p>
-<h3 id="乐观并发控制"><a href="#乐观并发控制" class="headerlink" title="乐观并发控制"></a>乐观并发控制</h3><p>使用乐观并发控制的前提是：数据竞争很少，即并发事务很少会访问到同一个对象上。</p>
-<p>乐观并发控制的主要手段是 <strong>检查</strong>。具体过程为：允许所有的事务都直接执行。但是事务不直接修改数据，而是将修改保留到这个事务的<strong>私有工作区</strong>。当事务结束时，检查这些修改是否有数据竞争。如果没有冲突（即没有其他并发事务访问到同一个对象），检查通过，将私有工作区的修改复制到数据库公共数据中，成功结束；如果有竞争，清空私有工作区，重试事务。</p>
-<p>MVCC（Multiversion concurrency control）是一种非常常见的乐观并发控制的实现方式，以加时间戳验证的方式实现。</p>
-<p><img src="/img/MVCC.png" alt=""></p>
+<h2 id="什么是Serverless和FaaS？"><a href="#什么是Serverless和FaaS？" class="headerlink" title="什么是Serverless和FaaS？"></a>什么是Serverless和FaaS？</h2><p>Serverless顾名思义，指的是一种对开发者完全不需要关注服务器的概念。但是传统的PaaS平台，开发者对服务运行的实例还是有感的，即便是没有调用，也依然需要占用资源，并对资源付费，并不是完全的 Serverless，直到 FaaS 出现。FaaS 全称 Function-as-a-Service，可以理解成给 Function 提供运行环境和调度的服务。Function 可以理解为一个代码功能块，这个功能块具体包含多少功能，无法明确给出定义，但有一个明确的指标：冷启动时间需要在毫秒数量级。因为 FaaS 的本质上是以程序的快速启动来实现正真的按需运行，按需伸缩，以及高可用。Function 配合调度系统，就可以完全做到开发者对服务运行的实例无感，这才是真的 Serverless。</p>
+<p>AWS的lambda是目前Serverless/FaaS在工业届最成熟的产品，其文档上有一个演示，非常形象地介绍了FaaS的工作机制。</p>
+<p><img src="https://img.colabug.com/2018/01/2c6540960fc2cbbb6b63889c479c977a.gif" alt=""></p>
+<p>动画中通过点击鼠标模拟事件，事件越多，lambda 的实例也越多，当没有新的事件的时候，lambda 实例自动销毁。下面引用自 Amazon 官网的介绍：</p>
+<blockquote>
+<p>通过 AWS Lambda，无需配置或管理服务器即可运行代码。您只需按消耗的计算时间付费 – 代码未运行时不产生费用。</p>
+<p>借助 Lambda，您几乎可以为任何类型的应用程序或后端服务运行代码，而且全部无需管理。只需上传您的代码，Lambda 会处理运行和扩展高可用性代码所需的一切工作。您可以将您的代码设置为自动从其他 AWS 服务触发，或者直接从任何 Web 或移动应用程序调用。</p>
+</blockquote>
+<p>Amazon Lambda 官网介绍了 Serverless 的3点优势：</p>
+<ol>
+<li>无需配置或管理服务器</li>
+<li>持续扩展：AWS Lambda 可通过运行代码以响应每个触发程序来自动扩展您的应用程序。您的代码将并行运行并逐个处理触发程序，按照工作负载的大小精密扩展。</li>
+<li>次秒级计量：使用 AWS Lambda 时，会按代码执行时间 (以每 100 毫秒为单位) 和代码触发次数收费。代码未运行时，无需支付任何费用。</li>
+</ol>
+<h2 id="从后端技术的演进来看待FaaS"><a href="#从后端技术的演进来看待FaaS" class="headerlink" title="从后端技术的演进来看待FaaS"></a>从后端技术的演进来看待FaaS</h2><p>没有互联网的时候，应用程序多是单机命令行软件。当互联网出现的时候，有了将应用程序通过网络给其他人提供服务的需求。于是出现了 CGI (Common Gateway Interface)，就是把命令行软件执行的结果通过网络输出。当时的应用程序的架构比较简单，启个 web 服务器监听网络端口，然后根据请求调用 CGI 程序，同时把请求数据传递给 CGI 程序，等待程序执行后把输出结果通过网络端口返回给客户端（一般是浏览器）。这种架构下，只有 web 服务器是常驻运行的，后面的 CGI 程序都是按需运行的，运行后就释放资源。于是诞生了一批支持 CGI 协议的脚本语言，比如 perl，php，asp，一方面脚本语言可以粘结 web 服务器和应用程序，另外一方面它本身也可以包含逻辑，于是逐渐出现专门针对 web 的用脚本编写的应用。</p>
+<p>这种方式的优势很明显，按需运算，没有调用就几乎没有资源占用。但缺点也很明显，每次调用都独立运行一个进程，如果并发量大，进程管理的资源浪费严重，随着互联网的发展出现了叫做 FastCGI 的技术。这种技术的思路是执行逻辑的进程不再是按需运行，而是常驻方式，web 服务器和 FastCGI 服务之间通过 unix socket 或者 tcp 进行交互。</p>
+<p>同时期出现的技术还有 Java EE，提供了另外一种解决思路。Java EE 提供了一种叫做应用服务器或者 web container 的服务器软件，提供 web 服务器的功能，应用按照 Java EE 的规范暴露入口方法，然后打包成独立的发布包，部署到应用服务器中。应用服务器动态将应用加载到内存，相当于以动态方式把 web 服务器和应用程序合并成同一个程序，同时通过多线程而不是多进程来解决并发问题。这种方式兼顾了性能和应用独立发布的需求，同时依托应用服务器可以支持更多特性，所以 Java EE 能广泛占据企业端的市场。</p>
+<p>但是，互联网服务的特点是一个服务给全球人使用，对可移植性和标准化并没那么热衷，但对并发以及性能的要求极高，Java EE 中的特性也没几个能满足这种需求，于是宁愿从头打造工具和组件。互联网高速发展了 10 多年后，大家开始思考，有没有一种应用的架构方式，即可以满足初期的快速研发需求，也可以承载后期的用户规模，还可以将应用的标准化功能沉淀到平台上独立提供？于是有了微服务，于是有了 FaaS。</p>
+<h2 id="从云计算的发展来看FaaS"><a href="#从云计算的发展来看FaaS" class="headerlink" title="从云计算的发展来看FaaS"></a>从云计算的发展来看FaaS</h2><p>第一阶段的云主要解决硬件资源（网络，计算，存储）的运维和供给问题，也就是 IaaS 云，可以理解成基于硬件资源的共享经济。IaaS 交付的主要是资源，接口以及控制台也是面向资源的。2006年AWS推出EC2云主机，作为最早的IaaS，用户可以通过AWS快速的申请到计算资源，并在上面部署自己的互联网服务。</p>
+<p>PaaS（Platform as a Service）是构建在IaaS之上的一种平台服务，提供操作系统安装、监控和服务发现等功能，用户只需要部署自己的应用即可。PaaS 交付的使用服务、应用。Heroko是最早的商业PaaS平台，还有一个开源的PaaS——Cloud Foundry，用户可以基于它来构建私有PaaS。</p>
+<p>SaaS 是构建在 PaaS上的云应用或者应用级的服务，其面向的是使用该应用的终端用户或者其上游服务、应用。我们这里不做过多的讨论。</p>
+<p>FaaS（Functions as a Service）函数即服务，前面我们已经讨论到，FaaS是Serverless的一种形式。FaaS本质上是一种事件驱动的由消息触发的服务，FaaS供应商一般会集成各种同步和异步的事件源，通过订阅这些事件源，可以突发或者定期的触发函数运行。FaaS使我们更加关注应用程序的逻辑，完全屏蔽了环境配置之类的事情。</p>
+<p>从目标来说，PaaS和FaaS二者有相似之处。PaaS 的目标也是给用户的自定义应用提供一种标准化的运行环境。但当前的以 GAE 以及 Cloud Foundry 为代表的 PaaS 解决方案，无论是公有云还是私有云，都一直处于一种不温不火的状态。这一方面是因为时机问题，早期的云用户主要关注的还是资源交付，不是应用交付，另外一方面 PaaS 如果试图要实现应用标准化，必须对应用有侵入和约束，同时 PaaS 接管的还是应用，开发者也是按应用交付的，也就是说，这种约束还需要应用开发者自己在应用中引入框架和 PaaS 平台交互实现。同时当前的 PaaS 并没有彻底屏蔽资源，没有实现按需运行和按需伸缩，很难做到以同一种架构应对用户规模的增长。</p>
+<p>而 FaaS 的解决方案就比较彻底，用户交付的不再是应用，而是具体的业务逻辑模块，应用的组装定义由 FaaS 平台或者更高层的应用平台来定义。给 Function 提供标准化运行环境的难度要小于给应用提供标准化运行环境，同时 FaaS 平台的接管能力要大于 PaaS ，可能实现以同一种架构应对不同用户规模。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>总的来说，这一波以应用为中心的云原生应用浪潮带来的变革，才刚刚开启，会是下个十年云的主题。无论 FaaS 波及的范围会到那一层，无论未来的应用平台是不是现在 FaaS 这个样子，但大的方向是确定的，并且 FaaS 已经在这个方向上前进，值得期待。</p>
 
       
     </div>
@@ -569,11 +531,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/分布式系统/" rel="tag"># 分布式系统</a>
-          
-            <a href="/tags/事务/" rel="tag"># 事务</a>
-          
-            <a href="/tags/数据库/" rel="tag"># 数据库</a>
+            <a href="/tags/软件工程/" rel="tag"># 软件工程</a>
           
         </div>
       
@@ -586,8 +544,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/05/03/big-data-storage/" rel="next" title="《大数据系统与数据分析》之存储">
-                <i class="fa fa-chevron-left"></i> 《大数据系统与数据分析》之存储
+              <a href="/2018/03/04/k8s-scheduling/" rel="next" title="几张图了解Kubernetes默认的调度策略">
+                <i class="fa fa-chevron-left"></i> 几张图了解Kubernetes默认的调度策略
               </a>
             
           </div>
@@ -595,10 +553,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/07/04/java-lock-optimization/" rel="prev" title="Java锁的优化思路">
-                Java锁的优化思路 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -789,7 +743,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#并发事务的问题"><span class="nav-number">1.</span> <span class="nav-text">并发事务的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#并发事务的正确性"><span class="nav-number">2.</span> <span class="nav-text">并发事务的正确性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#并发事务的4种隔离级别"><span class="nav-number">3.</span> <span class="nav-text">并发事务的4种隔离级别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#针对并发事务的解决方案"><span class="nav-number">4.</span> <span class="nav-text">针对并发事务的解决方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#悲观并发控制"><span class="nav-number">4.1.</span> <span class="nav-text">悲观并发控制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#悲观锁的实现"><span class="nav-number">4.2.</span> <span class="nav-text">悲观锁的实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#乐观并发控制"><span class="nav-number">4.3.</span> <span class="nav-text">乐观并发控制</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是Serverless和FaaS？"><span class="nav-number">1.</span> <span class="nav-text">什么是Serverless和FaaS？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#从后端技术的演进来看待FaaS"><span class="nav-number">2.</span> <span class="nav-text">从后端技术的演进来看待FaaS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#从云计算的发展来看FaaS"><span class="nav-number">3.</span> <span class="nav-text">从云计算的发展来看FaaS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
 
           </div>
