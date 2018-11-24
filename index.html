@@ -361,6 +361,131 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://lioncruise.github.io/2018/11/24/osdi-18/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="lioncruise(覃世军)">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Cassini">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/11/24/osdi-18/" itemprop="url">OSDI'18</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-24T14:47:06+08:00">
+                2018-11-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="Operating-Systems"><a href="#Operating-Systems" class="headerlink" title="Operating Systems"></a>Operating Systems</h2><p>LegoOS: A Disseminated, Distributed OS for Hardware Resource Disaggregation Yizhou Shan, Yutong Huang, Yilun Chen, and Yiying Zhang, Purdue University</p>
+<p>作者首先提到了现在（数据中心里面）硬件资源的解聚非常明显，也就是CPU、内存、存储分布在不同的机器上，另外异构化的趋势也越来越明显。作者表示传统的宏内核并不能很好地利用这些资源，因为具体的计算还是由其中一台台机器跑的，受到了机器上硬件资源的限制，然后提出了splitkernel的概念，把硬件资源分成三种类型：计算、内存、存储，彼此之间用RDMA进行通讯，然后就可以想用多少资源就用多少资源。然后作者实现了LegoOS，还能兼容Linux API，跑了下benchmark性能和现有的宏内核大抵相当。这个想法看起来还是很有意思的，相当于自动把一个程序变成分布式的了。不知道怎么做的，我觉得这三种资源的抽象都需要每台机子上的CPU+内存来跑，就有点像轻量级的hyperviosr？另外作者说放弃了coherence，那是不是意味着开发者写多线程程序、共享内存的时候就要格外小心？以及不知道网络带宽和延迟的影响有多大。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/11/24/osdi-18/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://lioncruise.github.io/2018/06/10/serverless/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -932,152 +1057,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://lioncruise.github.io/2017/10/24/k8s-HA-principle/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="lioncruise(覃世军)">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/uploads/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Cassini">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/24/k8s-HA-principle/" itemprop="url">高可用背后的原理</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-24T18:50:32+08:00">
-                2017-10-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/分布式系统/" itemprop="url" rel="index">
-                    <span itemprop="name">分布式系统</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>这两个月和博云合作的项目是要用于客户生产环境的，这个和我以前做的东西有很大的不同，所有基础架构必须给出高可用的解决方案。在这之前我只做过一些流量较小的用户产品或者一些原型项目，一开始基础架构都只给出了单节点的解决方案，结果被大师兄喷这个在生产环境根本不可用。不过事实确实是在一个真实的分布式系统中硬件损坏、进程崩溃、网络不通都可能直接导致系统不可用
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/10/24/k8s-HA-principle/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1132,7 +1111,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-count">22</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
